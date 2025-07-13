@@ -2,36 +2,27 @@
 import { createServerClient, type CookieOptions } from '@supabase/ssr'
 import { cookies } from 'next/headers'
 
+// 💡 여기서 배운 점:
+// 1. Next.js 13+의 서버 컴포넌트에서 cookies()는 비동기(async/await)로 처리해야 한다.
+// 2. 서버 전용 로직(데이터 fetching 등)에서는 RLS를 우회할 수 있는 'service_role' 키를 사용하는 것이 더 안정적이다.
+//    이 키는 'NEXT_PUBLIC_' 접두사 없이 환경 변수로 관리하여 브라우저 노출을 막는다.
+
 export function createClient() {
   const cookieStore = cookies()
 
-  // ✅ 기능 목적 요약: 서버 환경(서버 컴포넌트, API 라우트)에서 사용할 Supabase 클라이언트를 생성합니다.
-  // 💡 여기서 배운 점: 서버 클라이언트는 Next.js의 `cookies`와 연동하여 사용자의 인증 상태를 안전하게 관리할 수 있습니다.
   return createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!, // anon key 대신 service_role key 사용
     {
       cookies: {
-        get(name: string) {
+        async get(name: string) {
           return cookieStore.get(name)?.value
         },
-        set(name: string, value: string, options: CookieOptions) {
-          try {
-            cookieStore.set({ name, value, ...options })
-          } catch (error) {
-            // The `set` method was called from a Server Component.
-            // This can be ignored if you have middleware refreshing
-            // user sessions.
-          }
+        async set(name:string, value: string, options: CookieOptions) {
+          await cookieStore.set({ name, value, ...options })
         },
-        remove(name: string, options: CookieOptions) {
-          try {
-            cookieStore.set({ name, value: '', ...options })
-          } catch (error) {
-            // The `delete` method was called from a Server Component.
-            // This can be ignored if you have middleware refreshing
-            // user sessions.
-          }
+        async remove(name: string, options: CookieOptions) {
+          await cookieStore.set({ name, value: '', ...options })
         },
       },
     }
