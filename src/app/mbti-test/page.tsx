@@ -5,6 +5,8 @@ import { useReducer } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
+import { MbtiResult } from '@/components/MbtiResult'; // 🐞 버그 수정: 컴포넌트 임포트 추가
+
 
 type MbtiDimension = 'E' | 'I' | 'S' | 'N' | 'T' | 'F' | 'J' | 'P';
 
@@ -94,23 +96,7 @@ export default function MbtiTestPage() {
         );
       case 'result':
         const finalResult = calculateResult(state.answers);
-        return (
-          <Card className="text-center">
-            <CardHeader>
-              <CardDescription>내 강아지의 성향은?</CardDescription>
-              <CardTitle className="text-4xl font-bold text-primary">{finalResult}</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-lg mb-6">
-                {/* TODO: DB에서 MBTI 유형에 맞는 설명과 대표 견종 가져오기 */}
-                {finalResult} 유형에 대한 설명이 여기에 표시됩니다.
-              </p>
-              <Button size="lg" onClick={() => dispatch({ type: 'RESET_TEST' })}>
-                다시 테스트하기
-              </Button>
-            </CardContent>
-          </Card>
-        );
+        return <MbtiResult result={finalResult} onReset={() => dispatch({ type: 'RESET_TEST' })} />;
       case 'start':
       default:
         return (

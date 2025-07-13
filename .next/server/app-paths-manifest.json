@@ -1,4 +1,3 @@
 {
-  "/_not-found/page": "app/_not-found/page.js",
-  "/mbti-test/page": "app/mbti-test/page.js"
+  "/breeds/[id]/page": "app/breeds/[id]/page.js"
 }

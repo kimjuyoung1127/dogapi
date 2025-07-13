@@ -1,8 +1,8 @@
-// File: C:\Users\gmdqn\woofpedia-app\src\app\mbti-test\page.tsx
-import * as entry from '../../../../src/app/mbti-test/page.js'
+// File: C:\Users\gmdqn\woofpedia-app\src\app\breeds\[id]\page.tsx
+import * as entry from '../../../../../src/app/breeds/[id]/page.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 
-type TEntry = typeof import('../../../../src/app/mbti-test/page.js')
+type TEntry = typeof import('../../../../../src/app/breeds/[id]/page.js')
 
 type SegmentParams<T extends Object = any> = T extends Record<string, any>
   ? { [K in keyof T]: T[K] extends string ? string | string[] | undefined : never }
