@@ -4,12 +4,11 @@
 import { useState, useEffect } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import { BreedCard } from '@/components/BreedCard';
-import { Input } from '@/components/ui/input';
 import { BreedFilters } from '@/components/BreedFilters'; // 필터 컴포넌트 임포트
 
 export default function HomePage() {
   const [breeds, setBreeds] = useState<any[]>([]);
-  const [searchTerm, setSearchTerm] = useState('');
+  
   const [selectedSize, setSelectedSize] = useState<string | null>(null); // 크기 필터 상태 추가
   const [loading, setLoading] = useState(true);
 
@@ -31,13 +30,9 @@ export default function HomePage() {
 
   // ✅ 기능 목적 요약: 검색어와 크기 필터를 모두 적용하는 로직
   const filteredBreeds = breeds.filter(breed => {
-    const matchesSearchTerm = 
-      breed.name_ko.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      breed.name_en.toLowerCase().includes(searchTerm.toLowerCase());
-    
     const matchesSize = !selectedSize || breed.size_type === selectedSize;
 
-    return matchesSearchTerm && matchesSize;
+    return matchesSize;
   });
 
   return (
@@ -48,12 +43,6 @@ export default function HomePage() {
       </div>
 
       <div className="space-y-4 mb-8 max-w-md mx-auto">
-        <Input
-          type="text"
-          placeholder="견종 이름으로 검색... (한글 또는 영문)"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
         <BreedFilters onSizeChange={setSelectedSize} />
       </div>
 
