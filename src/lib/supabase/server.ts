@@ -1,16 +1,16 @@
 // src/lib/supabase/server.ts
 import { createServerClient, type CookieOptions } from '@supabase/ssr'
 import { cookies } from 'next/headers'
+import type { Database } from './database.types'
 
 // 💡 여기서 배운 점:
-// Next.js 13+의 서버 환경에서 Supabase SSR을 사용하려면,
-// cookies 객체의 모든 메서드(get, set, remove)를 try...catch 블록으로 감싸
-// 서버 컴포넌트 렌더링 과정에서 발생할 수 있는 예외를 안전하게 처리해야 한다.
+// 생성된 DB 타입을 제네릭으로 전달하면, Supabase 클라이언트는
+// 테이블과 컬럼 이름을 완벽하게 인지하여 자동 완성 및 타입 체크를 제공한다.
+// 이를 통해 'column not found'와 같은 런타임 오류를 사전에 방지할 수 있다.
+export function createServerSupabaseClient() {
+  const cookieStore = cookies()
 
-export async function createServerSupabaseClient() {
-  const cookieStore = await cookies()
-
-  const supabase = createServerClient(
+  return createServerClient<Database>(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.SUPABASE_SERVICE_ROLE_KEY!,
     {

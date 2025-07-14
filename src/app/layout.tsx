@@ -2,6 +2,8 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import Header from "@/components/layout/Header";
+import Footer from "@/components/layout/Footer";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -18,11 +20,11 @@ export default function RootLayout({
   return (
     <html lang="ko" className="dark">
       <body className={`${inter.className} flex flex-col min-h-screen bg-background`}>
-        {/* TODO: Header 컴포넌트 추가 예정 */}
+        <Header />
         <main className="flex-grow container mx-auto px-4 sm:px-6 lg:px-8 py-8">
           {children}
         </main>
-        {/* TODO: Footer 컴포넌트 추가 예정 */}
+        <Footer />
       </body>
     </html>
   );
