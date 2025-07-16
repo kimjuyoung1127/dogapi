@@ -1,8 +1,5 @@
-// src/components/FeatureRating.tsx
-import { Star } from 'lucide-react';
-
-// ✅ 기능 목적 요약: 1~5점의 숫자 점수를 별점 아이콘으로 시각화합니다.
-// 💡 여기서 배운 점: `Array.from`과 `map`을 사용하면 반복적인 UI 요소를 쉽게 생성할 수 있다.
+// ✅ 기능 목적 요약: 1~5점의 숫자 점수를 프로그레스 바로 시각화합니다.
+// 💡 div와 TailwindCSS의 너비(width) 속성만으로 구현하여 안정성을 높였습니다.
 
 interface FeatureRatingProps {
   label: string;
@@ -11,18 +8,20 @@ interface FeatureRatingProps {
 }
 
 export function FeatureRating({ label, rating, maxRating = 5 }: FeatureRatingProps) {
-  const filledStars = rating || 0;
-  
+  const normalizedRating = rating || 0;
+  const percentage = (normalizedRating / maxRating) * 100;
+
   return (
-    <div className="flex items-center justify-between">
-      <span className="text-sm font-medium">{label}</span>
-      <div className="flex items-center">
-        {Array.from({ length: maxRating }, (_, i) => (
-          <Star
-            key={i}
-            className={`h-5 w-5 ${i < filledStars ? 'text-yellow-400 fill-yellow-400' : 'text-gray-300'}`}
-          />
-        ))}
+    <div className="flex flex-col space-y-1">
+      <div className="flex justify-between items-baseline">
+        <span className="text-sm font-medium text-gray-700">{label}</span>
+        <span className="text-xs font-semibold text-gray-500">{normalizedRating} / {maxRating}</span>
+      </div>
+      <div className="w-full bg-gray-200 rounded-full h-2.5">
+        <div 
+          className="bg-blue-500 h-2.5 rounded-full" 
+          style={{ width: `${percentage}%` }}
+        ></div>
       </div>
     </div>
   );

@@ -3,8 +3,8 @@
 
 import { useState, useEffect } from 'react';
 import { createClient } from '@/lib/supabase/client';
-import { BreedCard } from '@/components/BreedCard';
-import { BreedFilters } from '@/components/BreedFilters'; // 필터 컴포넌트 임포트
+import BreedCard from '@/components/BreedCard';
+import BreedFilters from '@/components/BreedFilters'; // 필터 컴포넌트 임포트
 
 export default function HomePage() {
   const [breeds, setBreeds] = useState<any[]>([]);
@@ -43,7 +43,9 @@ export default function HomePage() {
       </div>
 
       <div className="space-y-4 mb-8 max-w-md mx-auto">
-        <BreedFilters onSizeChange={setSelectedSize} />
+        <BreedFilters onSizeChange={setSelectedSize} onSearchChange={function (query: string): void {
+          throw new Error('Function not implemented.');
+        } } />
       </div>
 
       {loading ? (
